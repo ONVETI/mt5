@@ -21,24 +21,27 @@ fun NavGraphBuilder.mainRoute(
     navController: NavController,
 ) = composable<MainRoute> {
 
-        val viewModel: MainViewModel = koinViewModel()
-        val state by viewModel.collectAsState()
-        val scope = rememberCoroutineScope()
-        val snackbarHostState = remember { SnackbarHostState() }
+    val viewModel: MainViewModel = koinViewModel()
+    val state by viewModel.collectAsState()
+    val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
 
-        viewModel.collectSideEffect { sideEffect ->
-            when (sideEffect) {
-                is MainSideEffect.NavigateBack -> navController.navigateUp()
+    viewModel.collectSideEffect { sideEffect ->
+        when (sideEffect) {
+            is MainSideEffect.NavigateBack -> navController.navigateUp()
 
-                is MainSideEffect.Error -> scope.launch {
-                    snackbarHostState.showSnackbar(sideEffect.throwable.message ?: "Unknown error occurred")
-                }
+            is MainSideEffect.Error -> scope.launch {
+                snackbarHostState.showSnackbar(
+                    sideEffect.throwable.message ?: "Unknown error occurred"
+                )
             }
         }
-
-        MainScreen(
-            state = state,
-            onAction = viewModel::onAction,
-            snackbarHostState = snackbarHostState,
-        )
     }
+
+    MainScreen(
+        rootNavController = navController,
+        state = state,
+        onAction = viewModel::onAction,
+        snackbarHostState = snackbarHostState,
+    )
+}

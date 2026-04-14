@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import uz.anvar.mt5.screens.main.MainRoute
+import uz.anvar.mt5.screens.main.mainRoute
 import uz.anvar.mt5.ui.theme.AppTheme
 
 class MainActivity : ComponentActivity() {
@@ -55,12 +56,7 @@ class MainActivity : ComponentActivity() {
                     },
                 ) {
 
-//                    splashRoute(navController = navController)
-//                    pinLockRoute(navController = navController)
-//                    homeRoute(navController = navController)
-//                    adduserRoute(navController = navController)
-//                    usersRoute(navController = navController)
-//                    qrcodeRoute(navController = navController)
+                    mainRoute(navController)
 
                 }
             }

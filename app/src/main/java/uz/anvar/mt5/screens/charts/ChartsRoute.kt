@@ -21,24 +21,26 @@ fun NavGraphBuilder.chartsRoute(
     navController: NavController,
 ) = composable<ChartsRoute> {
 
-        val viewModel: ChartsViewModel = koinViewModel()
-        val state by viewModel.collectAsState()
-        val scope = rememberCoroutineScope()
-        val snackbarHostState = remember { SnackbarHostState() }
+    val viewModel: ChartsViewModel = koinViewModel()
+    val state by viewModel.collectAsState()
+    val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
 
-        viewModel.collectSideEffect { sideEffect ->
-            when (sideEffect) {
-                is ChartsSideEffect.NavigateBack -> navController.navigateUp()
+    viewModel.collectSideEffect { sideEffect ->
+        when (sideEffect) {
+            is ChartsSideEffect.NavigateBack -> navController.navigateUp()
 
-                is ChartsSideEffect.Error -> scope.launch {
-                    snackbarHostState.showSnackbar(sideEffect.throwable.message ?: "Unknown error occurred")
-                }
+            is ChartsSideEffect.Error -> scope.launch {
+                snackbarHostState.showSnackbar(
+                    sideEffect.throwable.message ?: "Unknown error occurred"
+                )
             }
         }
-
-        ChartsScreen(
-            state = state,
-            onAction = viewModel::onAction,
-            snackbarHostState = snackbarHostState,
-        )
     }
+
+    ChartsScreen(
+        state = state,
+        onAction = viewModel::onAction,
+        snackbarHostState = snackbarHostState,
+    )
+}

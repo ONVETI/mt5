@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">mt5</string>
+
+    <string name="quotes">Quotes</string>
+    <string name="charts">Charts</string>
+    <string name="trade">Trade</string>
+    <string name="history">History</string>
+    <string name="messages">Messages</string>
 </resources>

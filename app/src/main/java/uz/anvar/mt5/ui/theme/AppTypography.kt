@@ -13,6 +13,7 @@ import uz.anvar.mt5.R
 fun montserratFontFamily() = FontFamily(
     Font(R.font.montserrat_medium, FontWeight.Medium),
     Font(R.font.montserrat_semibold, FontWeight.SemiBold),
+    //roboto
 )
 
 @Composable

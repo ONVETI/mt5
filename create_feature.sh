@@ -93,7 +93,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import uz.anvar.mt5.compose.theme.AppTheme
+import uz.anvar.mt5.ui.theme.AppTheme
 import uz.anvar.mt5.screens.${FEATURE_NAME_SNAKE}.component.${FEATURE_NAME_PASCAL}BottomBar
 import uz.anvar.mt5.screens.${FEATURE_NAME_SNAKE}.component.${FEATURE_NAME_PASCAL}TopBar
 import uz.anvar.mt5.screens.${FEATURE_NAME_SNAKE}.state.${FEATURE_NAME_PASCAL}Action
