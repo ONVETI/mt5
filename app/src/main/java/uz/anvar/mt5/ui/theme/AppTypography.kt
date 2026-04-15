@@ -10,17 +10,20 @@ import androidx.compose.ui.unit.sp
 import uz.anvar.mt5.R
 
 @Composable
-fun montserratFontFamily() = FontFamily(
-    Font(R.font.montserrat_medium, FontWeight.Medium),
-    Font(R.font.montserrat_semibold, FontWeight.SemiBold),
-    //roboto
+fun avenirFontFamily() = FontFamily(
+    Font(R.font.avenir_next_condensed_demi_bold, FontWeight.Bold),
 )
 
 @Composable
-fun interFontFamily() = FontFamily(
-    Font(R.font.inter_regular, FontWeight.Normal),
-    Font(R.font.inter_medium, FontWeight.Medium),
-    Font(R.font.inter_semibold, FontWeight.SemiBold),
+fun robotoFontFamily() = FontFamily(
+    Font(R.font.roboto_regular, FontWeight.Normal),
+    Font(R.font.roboto_bold, FontWeight.Bold),
+)
+
+@Composable
+fun robotoCondensedFontFamily() = FontFamily(
+    Font(R.font.roboto_condensed_regular, FontWeight.Normal),
+    Font(R.font.roboto_condensed_bold, FontWeight.Bold),
 )
 
 data class AppTypographyPalette(
@@ -41,114 +44,134 @@ data class AppTypographyPalette(
     val secondary14Regular: TextStyle,
     val secondary14Medium: TextStyle,
     val secondary12SemiboldCaps: TextStyle,
+
+    val third16Regular: TextStyle,
+    val third16Medium: TextStyle,
 )
 
 @Composable
 fun createAppTypographyPalette(): AppTypographyPalette {
-    val montserrat = montserratFontFamily()
-    val inter = interFontFamily()
+    val avenir = avenirFontFamily()
+    val roboto = robotoFontFamily()
+    val robotoCondensed = robotoCondensedFontFamily()
+
     return AppTypographyPalette(
         primary32Semibold = TextStyle(
-            fontFamily = montserrat,
+            fontFamily = roboto,
             fontWeight = FontWeight.SemiBold,
             fontSize = 32.sp,
             lineHeight = 39.sp,
             letterSpacing = (-0.02).sp,
         ),
         primary28Semibold = TextStyle(
-            fontFamily = montserrat,
+            fontFamily = roboto,
             fontWeight = FontWeight.SemiBold,
             fontSize = 28.sp,
             lineHeight = 32.sp,
             letterSpacing = (-0.02).sp,
         ),
         primary24Semibold = TextStyle(
-            fontFamily = montserrat,
+            fontFamily = roboto,
             fontWeight = FontWeight.SemiBold,
             fontSize = 24.sp,
             lineHeight = 32.sp,
             letterSpacing = (-0.02).sp,
         ),
         primary18Semibold = TextStyle(
-            fontFamily = montserrat,
+            fontFamily = roboto,
             fontWeight = FontWeight.SemiBold,
             fontSize = 18.sp,
             lineHeight = 22.sp,
         ),
         primary16Medium = TextStyle(
-            fontFamily = montserrat,
+            fontFamily = roboto,
             fontWeight = FontWeight.Medium,
             fontSize = 16.sp,
             lineHeight = 22.sp,
             letterSpacing = (-0.02).sp,
         ),
         primary14SemiboldCaps = TextStyle(
-            fontFamily = montserrat,
+            fontFamily = roboto,
             fontWeight = FontWeight.SemiBold,
             fontSize = 14.sp,
             lineHeight = 16.sp,
             letterSpacing = 0.01.sp,
         ),
 
+
         secondary20Regular = TextStyle(
-            fontFamily = inter,
+            fontFamily = robotoCondensed,
             fontWeight = FontWeight.Normal,
             fontSize = 20.sp,
             lineHeight = 28.sp,
         ),
-
         secondary24Medium = TextStyle(
-            fontFamily = inter,
+            fontFamily = robotoCondensed,
             fontWeight = FontWeight.Medium,
             fontSize = 24.sp,
             lineHeight = 32.sp,
         ),
         secondary18Semibold = TextStyle(
-            fontFamily = inter,
+            fontFamily = robotoCondensed,
             fontWeight = FontWeight.SemiBold,
             fontSize = 18.sp,
             lineHeight = 22.sp,
         ),
         secondary18Regular = TextStyle(
-            fontFamily = inter,
+            fontFamily = robotoCondensed,
             fontWeight = FontWeight.Normal,
             fontSize = 18.sp,
             lineHeight = 22.sp,
         ),
         secondary18Medium = TextStyle(
-            fontFamily = inter,
+            fontFamily = robotoCondensed,
             fontWeight = FontWeight.Medium,
             fontSize = 18.sp,
             lineHeight = 24.sp,
         ),
         secondary16Regular = TextStyle(
-            fontFamily = inter,
+            fontFamily = robotoCondensed,
             fontWeight = FontWeight.Normal,
             fontSize = 16.sp,
             lineHeight = 22.sp,
         ),
         secondary16Medium = TextStyle(
-            fontFamily = inter,
+            fontFamily = robotoCondensed,
             fontWeight = FontWeight.Medium,
             fontSize = 16.sp,
             lineHeight = 22.sp,
         ),
         secondary14Regular = TextStyle(
-            fontFamily = inter,
+            fontFamily = robotoCondensed,
             fontWeight = FontWeight.Normal,
             fontSize = 14.sp,
             lineHeight = 18.sp,
         ),
         secondary14Medium = TextStyle(
-            fontFamily = inter,
+            fontFamily = robotoCondensed,
             fontWeight = FontWeight.Medium,
             fontSize = 14.sp,
             lineHeight = 18.sp,
         ),
         secondary12SemiboldCaps = TextStyle(
-            fontFamily = inter,
+            fontFamily = robotoCondensed,
             fontWeight = FontWeight.SemiBold,
             fontSize = 12.sp,
+            lineHeight = 14.sp,
+            letterSpacing = 0.02.sp,
+        ),
+
+        third16Regular = TextStyle(
+            fontFamily = avenirFontFamily(),
+            fontWeight = FontWeight.Normal,
+            fontSize = 16.sp,
+            lineHeight = 14.sp,
+            letterSpacing = 0.02.sp,
+        ),
+        third16Medium = TextStyle(
+            fontFamily = avenirFontFamily(),
+            fontWeight = FontWeight.Medium,
+            fontSize = 16.sp,
             lineHeight = 14.sp,
             letterSpacing = 0.02.sp,
         ),

@@ -10,9 +10,11 @@ import androidx.navigation.compose.composable
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.viewmodel.koinActivityViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 import uz.anvar.mt5.screens.charts.state.ChartsSideEffect
+import uz.anvar.mt5.screens.main.MainViewModel
 
 @Serializable
 data object ChartsRoute
@@ -22,6 +24,8 @@ fun NavGraphBuilder.chartsRoute(
 ) = composable<ChartsRoute> {
 
     val viewModel: ChartsViewModel = koinViewModel()
+    val mainViewModel: MainViewModel = koinActivityViewModel()
+
     val state by viewModel.collectAsState()
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -41,6 +45,7 @@ fun NavGraphBuilder.chartsRoute(
     ChartsScreen(
         state = state,
         onAction = viewModel::onAction,
+        drawerAction = mainViewModel::onAction,
         snackbarHostState = snackbarHostState,
     )
 }

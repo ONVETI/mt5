@@ -8,16 +8,18 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import uz.anvar.mt5.ui.theme.AppTheme
 import uz.anvar.mt5.screens.charts.component.ChartsBottomBar
 import uz.anvar.mt5.screens.charts.component.ChartsTopBar
 import uz.anvar.mt5.screens.charts.state.ChartsAction
 import uz.anvar.mt5.screens.charts.state.ChartsState
+import uz.anvar.mt5.screens.main.state.MainAction
+import uz.anvar.mt5.ui.theme.AppTheme
 
 @Composable
 internal fun ChartsScreen(
     state: ChartsState,
     onAction: (ChartsAction) -> Unit,
+    drawerAction: (MainAction) -> Unit,
     snackbarHostState: SnackbarHostState,
 ) {
     Scaffold(
@@ -26,6 +28,7 @@ internal fun ChartsScreen(
             ChartsTopBar(
                 state = state,
                 onAction = onAction,
+                drawerAction = drawerAction
             )
         },
         bottomBar = {
@@ -63,6 +66,7 @@ private fun PreviewChartsScreen() {
         ChartsScreen(
             state = ChartsState(),
             onAction = {},
+            drawerAction = {},
             snackbarHostState = SnackbarHostState()
         )
     }

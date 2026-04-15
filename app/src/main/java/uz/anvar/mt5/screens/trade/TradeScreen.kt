@@ -8,16 +8,18 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import uz.anvar.mt5.ui.theme.AppTheme
+import uz.anvar.mt5.screens.main.state.MainAction
 import uz.anvar.mt5.screens.trade.component.TradeBottomBar
 import uz.anvar.mt5.screens.trade.component.TradeTopBar
 import uz.anvar.mt5.screens.trade.state.TradeAction
 import uz.anvar.mt5.screens.trade.state.TradeState
+import uz.anvar.mt5.ui.theme.AppTheme
 
 @Composable
 internal fun TradeScreen(
     state: TradeState,
     onAction: (TradeAction) -> Unit,
+    drawerAction: (MainAction) -> Unit,
     snackbarHostState: SnackbarHostState,
 ) {
     Scaffold(
@@ -26,6 +28,7 @@ internal fun TradeScreen(
             TradeTopBar(
                 state = state,
                 onAction = onAction,
+                drawerAction = drawerAction
             )
         },
         bottomBar = {
@@ -63,6 +66,7 @@ private fun PreviewTradeScreen() {
         TradeScreen(
             state = TradeState(),
             onAction = {},
+            drawerAction = {},
             snackbarHostState = SnackbarHostState()
         )
     }

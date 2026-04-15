@@ -8,16 +8,18 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import uz.anvar.mt5.ui.theme.AppTheme
+import uz.anvar.mt5.screens.main.state.MainAction
 import uz.anvar.mt5.screens.quotes.component.QuotesBottomBar
 import uz.anvar.mt5.screens.quotes.component.QuotesTopBar
 import uz.anvar.mt5.screens.quotes.state.QuotesAction
 import uz.anvar.mt5.screens.quotes.state.QuotesState
+import uz.anvar.mt5.ui.theme.AppTheme
 
 @Composable
 internal fun QuotesScreen(
     state: QuotesState,
     onAction: (QuotesAction) -> Unit,
+    drawerAction: (MainAction) -> Unit,
     snackbarHostState: SnackbarHostState,
 ) {
     Scaffold(
@@ -26,6 +28,7 @@ internal fun QuotesScreen(
             QuotesTopBar(
                 state = state,
                 onAction = onAction,
+                drawerAction = drawerAction
             )
         },
         bottomBar = {
@@ -63,6 +66,7 @@ private fun PreviewQuotesScreen() {
         QuotesScreen(
             state = QuotesState(),
             onAction = {},
+            drawerAction = {},
             snackbarHostState = SnackbarHostState()
         )
     }

@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.viewmodel.koinActivityViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 import uz.anvar.mt5.screens.main.state.MainSideEffect
@@ -21,7 +22,7 @@ fun NavGraphBuilder.mainRoute(
     navController: NavController,
 ) = composable<MainRoute> {
 
-    val viewModel: MainViewModel = koinViewModel()
+    val viewModel: MainViewModel = koinActivityViewModel()
     val state by viewModel.collectAsState()
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }

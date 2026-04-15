@@ -8,16 +8,18 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import uz.anvar.mt5.ui.theme.AppTheme
 import uz.anvar.mt5.screens.history.component.HistoryBottomBar
 import uz.anvar.mt5.screens.history.component.HistoryTopBar
 import uz.anvar.mt5.screens.history.state.HistoryAction
 import uz.anvar.mt5.screens.history.state.HistoryState
+import uz.anvar.mt5.screens.main.state.MainAction
+import uz.anvar.mt5.ui.theme.AppTheme
 
 @Composable
 internal fun HistoryScreen(
     state: HistoryState,
     onAction: (HistoryAction) -> Unit,
+    drawerAction: (MainAction) -> Unit,
     snackbarHostState: SnackbarHostState,
 ) {
     Scaffold(
@@ -26,6 +28,7 @@ internal fun HistoryScreen(
             HistoryTopBar(
                 state = state,
                 onAction = onAction,
+                drawerAction = drawerAction
             )
         },
         bottomBar = {
@@ -63,7 +66,8 @@ private fun PreviewHistoryScreen() {
         HistoryScreen(
             state = HistoryState(),
             onAction = {},
-            snackbarHostState = SnackbarHostState()
+            drawerAction = {},
+            snackbarHostState = SnackbarHostState(),
         )
     }
 }

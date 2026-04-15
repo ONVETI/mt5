@@ -10,8 +10,10 @@ import androidx.navigation.compose.composable
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.viewmodel.koinActivityViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
+import uz.anvar.mt5.screens.main.MainViewModel
 import uz.anvar.mt5.screens.quotes.state.QuotesSideEffect
 
 @Serializable
@@ -21,24 +23,29 @@ fun NavGraphBuilder.quotesRoute(
     navController: NavController,
 ) = composable<QuotesRoute> {
 
-        val viewModel: QuotesViewModel = koinViewModel()
-        val state by viewModel.collectAsState()
-        val scope = rememberCoroutineScope()
-        val snackbarHostState = remember { SnackbarHostState() }
+    val viewModel: QuotesViewModel = koinViewModel()
+    val mainViewModel: MainViewModel = koinActivityViewModel()
 
-        viewModel.collectSideEffect { sideEffect ->
-            when (sideEffect) {
-                is QuotesSideEffect.NavigateBack -> navController.navigateUp()
+    val state by viewModel.collectAsState()
+    val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
 
-                is QuotesSideEffect.Error -> scope.launch {
-                    snackbarHostState.showSnackbar(sideEffect.throwable.message ?: "Unknown error occurred")
-                }
+    viewModel.collectSideEffect { sideEffect ->
+        when (sideEffect) {
+            is QuotesSideEffect.NavigateBack -> navController.navigateUp()
+
+            is QuotesSideEffect.Error -> scope.launch {
+                snackbarHostState.showSnackbar(
+                    sideEffect.throwable.message ?: "Unknown error occurred"
+                )
             }
         }
-
-        QuotesScreen(
-            state = state,
-            onAction = viewModel::onAction,
-            snackbarHostState = snackbarHostState,
-        )
     }
+
+    QuotesScreen(
+        state = state,
+        onAction = viewModel::onAction,
+        drawerAction = mainViewModel::onAction,
+        snackbarHostState = snackbarHostState,
+    )
+}

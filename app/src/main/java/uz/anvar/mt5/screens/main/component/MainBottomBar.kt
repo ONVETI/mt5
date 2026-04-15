@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Red
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import uz.anvar.mt5.R
 import uz.anvar.mt5.screens.charts.ChartsRoute
@@ -32,7 +33,7 @@ internal fun MainBottomBar(
     onAction: (MainAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val selectedContentColor = Color(0xFF3A82EE)
+    val selectedContentColor = Color(0xFF0B71F1)
     val selectedIndicatorColor = Color(0xFFF1F8FE)
 
     val unselectedIconColor = Color(0xFF544B49)
@@ -209,7 +210,15 @@ internal fun MainBottomBar(
 
 }
 
+@Preview
 @Composable
 private fun PreviewMainBottomBar() {
-
+    AppTheme {
+        MainBottomBar(
+            state = MainState(
+                selectedBottomNavItem = ""
+            ),
+            onAction = {}
+        )
+    }
 }

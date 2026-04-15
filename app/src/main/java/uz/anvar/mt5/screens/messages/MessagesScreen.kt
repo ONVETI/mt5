@@ -8,16 +8,18 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import uz.anvar.mt5.ui.theme.AppTheme
+import uz.anvar.mt5.screens.main.state.MainAction
 import uz.anvar.mt5.screens.messages.component.MessagesBottomBar
 import uz.anvar.mt5.screens.messages.component.MessagesTopBar
 import uz.anvar.mt5.screens.messages.state.MessagesAction
 import uz.anvar.mt5.screens.messages.state.MessagesState
+import uz.anvar.mt5.ui.theme.AppTheme
 
 @Composable
 internal fun MessagesScreen(
     state: MessagesState,
     onAction: (MessagesAction) -> Unit,
+    drawerAction: (MainAction) -> Unit,
     snackbarHostState: SnackbarHostState,
 ) {
     Scaffold(
@@ -26,6 +28,7 @@ internal fun MessagesScreen(
             MessagesTopBar(
                 state = state,
                 onAction = onAction,
+                drawerAction = drawerAction
             )
         },
         bottomBar = {
@@ -63,6 +66,7 @@ private fun PreviewMessagesScreen() {
         MessagesScreen(
             state = MessagesState(),
             onAction = {},
+            drawerAction = {},
             snackbarHostState = SnackbarHostState()
         )
     }
