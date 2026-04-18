@@ -1,13 +1,14 @@
 package uz.anvar.mt5.screens.history
 
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.CoroutineExceptionHandler
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.viewmodel.container
 import uz.anvar.mt5.screens.history.state.HistoryAction
 import uz.anvar.mt5.screens.history.state.HistorySideEffect
 import uz.anvar.mt5.screens.history.state.HistoryState
-import kotlinx.coroutines.CoroutineExceptionHandler
+import uz.anvar.mt5.screens.history.state.HistoryTab
 
 internal class HistoryViewModel : ViewModel(), ContainerHost<HistoryState, HistorySideEffect> {
 
