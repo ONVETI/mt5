@@ -29,7 +29,12 @@ internal class HistoryViewModel : ViewModel(), ContainerHost<HistoryState, Histo
     fun onAction(action: HistoryAction) {
         when (action) {
             is HistoryAction.NavigateBack -> onNavigateBackClicked()
+            is HistoryAction.SelectTab -> onSelectTab(action.tab)
         }
+    }
+
+    private fun onSelectTab(tab: HistoryTab) = intent {
+        reduce { state.copy(selectedTab = tab) }
     }
 
     private fun onNavigateBackClicked() = intent {
