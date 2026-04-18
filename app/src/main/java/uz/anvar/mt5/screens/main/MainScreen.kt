@@ -65,7 +65,7 @@ internal fun MainScreen(
                 onAction = onAction
             )
         },
-        gesturesEnabled = true,
+        gesturesEnabled = state.isDrawerOpen,
     ) {
         Scaffold(
             modifier = Modifier.safeDrawingPadding(),
