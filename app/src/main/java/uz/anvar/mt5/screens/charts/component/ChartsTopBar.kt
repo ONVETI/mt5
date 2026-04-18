@@ -75,6 +75,7 @@ internal fun ChartsTopBar(
                     painter = painterResource(id = R.drawable.two_pending_order),
                     contentDescription = null,
                     modifier = Modifier.size(24.dp),
+                    tint = Color.Unspecified
                 )
             }
             IconButton(
@@ -85,6 +86,7 @@ internal fun ChartsTopBar(
                     painter = painterResource(id = R.drawable.six_ic_trading),
                     contentDescription = null,
                     modifier = Modifier.size(24.dp),
+                    tint = Color.Unspecified
                 )
             }
         }

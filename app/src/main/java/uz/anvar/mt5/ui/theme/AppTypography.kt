@@ -2,6 +2,7 @@ package uz.anvar.mt5.ui.theme
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -32,7 +33,9 @@ data class AppTypographyPalette(
     val primary24Semibold: TextStyle,
     val primary18Semibold: TextStyle,
     val primary16Medium: TextStyle,
+    val primary16Bold: TextStyle,
     val primary14SemiboldCaps: TextStyle,
+    val primary14Regular: TextStyle,
 
     val secondary24Medium: TextStyle,
     val secondary20Regular: TextStyle,
@@ -41,12 +44,14 @@ data class AppTypographyPalette(
     val secondary18Semibold: TextStyle,
     val secondary16Regular: TextStyle,
     val secondary16Medium: TextStyle,
+    val secondary16Bold: TextStyle,
     val secondary14Regular: TextStyle,
     val secondary14Medium: TextStyle,
     val secondary12SemiboldCaps: TextStyle,
 
     val third16Regular: TextStyle,
     val third16Medium: TextStyle,
+    val third16Bold: TextStyle,
 )
 
 @Composable
@@ -90,12 +95,27 @@ fun createAppTypographyPalette(): AppTypographyPalette {
             lineHeight = 22.sp,
             letterSpacing = (-0.02).sp,
         ),
+        primary16Bold = TextStyle(
+            fontFamily = roboto,
+            fontWeight = FontWeight.Bold,
+            fontSize = 16.sp,
+            lineHeight = 22.sp,
+            letterSpacing = (-0.02).sp,
+        ),
         primary14SemiboldCaps = TextStyle(
             fontFamily = roboto,
             fontWeight = FontWeight.SemiBold,
             fontSize = 14.sp,
             lineHeight = 16.sp,
             letterSpacing = 0.01.sp,
+        ),
+        primary14Regular = TextStyle(
+            fontFamily = roboto,
+            fontWeight = FontWeight.Normal,
+            fontSize = 14.sp,
+            lineHeight = 16.sp,
+            letterSpacing = 0.01.sp,
+            color = Color(0xFF808080)
         ),
 
 
@@ -141,6 +161,12 @@ fun createAppTypographyPalette(): AppTypographyPalette {
             fontSize = 16.sp,
             lineHeight = 22.sp,
         ),
+        secondary16Bold = TextStyle(
+            fontFamily = robotoCondensed,
+            fontWeight = FontWeight.Bold,
+            fontSize = 16.sp,
+            lineHeight = 22.sp,
+        ),
         secondary14Regular = TextStyle(
             fontFamily = robotoCondensed,
             fontWeight = FontWeight.Normal,
@@ -171,6 +197,13 @@ fun createAppTypographyPalette(): AppTypographyPalette {
         third16Medium = TextStyle(
             fontFamily = avenirFontFamily(),
             fontWeight = FontWeight.Medium,
+            fontSize = 16.sp,
+            lineHeight = 14.sp,
+            letterSpacing = 0.02.sp,
+        ),
+        third16Bold = TextStyle(
+            fontFamily = avenirFontFamily(),
+            fontWeight = FontWeight.Bold,
             fontSize = 16.sp,
             lineHeight = 14.sp,
             letterSpacing = 0.02.sp,

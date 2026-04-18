@@ -25,7 +25,7 @@ data class AppColorPalette(
 )
 
 val LightColorPalette = AppColorPalette(
-    surfacePrimary = Color(0xFF00B950),
+    surfacePrimary = Color(0xFF3183FF),
     surfaceInputs = Color(0xFFF6F6F6),
     surfaceIcons = Color(0xFFF6F6F6),
     surfaceDisabled = Color(0xFFD0D0D0),
