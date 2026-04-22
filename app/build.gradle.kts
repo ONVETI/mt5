@@ -67,6 +67,7 @@ dependencies {
 
     // Navigation
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.androidx.compose.ui.text)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -76,5 +77,9 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 
+    //Charts
     implementation("com.tradingview:lightweightcharts:4.0.0")
+
+    //Icons
+    implementation("androidx.compose.material:material-icons-extended")
 }

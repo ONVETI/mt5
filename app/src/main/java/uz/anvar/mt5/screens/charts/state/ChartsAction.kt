@@ -4,4 +4,6 @@ internal sealed interface ChartsAction {
 
     data object NavigateBack : ChartsAction
 
+    data object ClickTrading: ChartsAction
+
 }

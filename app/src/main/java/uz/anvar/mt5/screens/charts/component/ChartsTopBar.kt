@@ -79,7 +79,7 @@ internal fun ChartsTopBar(
                 )
             }
             IconButton(
-                onClick = { },
+                onClick = { onAction.invoke(ChartsAction.ClickTrading) },
                 modifier = Modifier.padding()
             ) {
                 Icon(

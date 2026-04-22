@@ -1,13 +1,13 @@
 package uz.anvar.mt5.screens.charts
 
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.CoroutineExceptionHandler
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.viewmodel.container
 import uz.anvar.mt5.screens.charts.state.ChartsAction
 import uz.anvar.mt5.screens.charts.state.ChartsSideEffect
 import uz.anvar.mt5.screens.charts.state.ChartsState
-import kotlinx.coroutines.CoroutineExceptionHandler
 
 internal class ChartsViewModel : ViewModel(), ContainerHost<ChartsState, ChartsSideEffect> {
 
@@ -29,7 +29,12 @@ internal class ChartsViewModel : ViewModel(), ContainerHost<ChartsState, ChartsS
     fun onAction(action: ChartsAction) {
         when (action) {
             is ChartsAction.NavigateBack -> onNavigateBackClicked()
+            ChartsAction.ClickTrading -> onTradingClicked()
         }
+    }
+
+    private fun onTradingClicked() = intent {
+        reduce { state.copy(isVisibleTradingContent = !state.isVisibleTradingContent) }
     }
 
     private fun onNavigateBackClicked() = intent {
