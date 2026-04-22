@@ -29,7 +29,7 @@ internal class ChartsViewModel(
         },
         onCreate = {
             fetchInitialData()
-            startRealTimeUpdates()
+            observeRealTimeUpdates()
         },
     )
 
@@ -52,16 +52,28 @@ internal class ChartsViewModel(
             }
     }
 
-    private fun startRealTimeUpdates() = intent {
-        while (true) {
-            delay(1000) // Poll every 15 seconds
-            forexRepository.getEurUsdTimeSeries()
-                .catch { /* Silently handle periodic poll errors */ }
-                .collect { candles ->
-                    reduce { state.copy(candles = candles) }
+    private fun observeRealTimeUpdates() = intent {
+        forexRepository.observeRealTimePrice()
+            .catch { /* Handle WS errors */ }
+            .collect { update ->
+                val currentCandles = state.candles.toMutableList()
+                if (currentCandles.isNotEmpty() && update.price != null) {
+                    val lastIndex = currentCandles.lastIndex
+                    val lastCandle = currentCandles[lastIndex]
+
+                    val newPrice = update.price.toFloat()
+                    val updatedCandle = lastCandle.copy(
+                        close = newPrice,
+                        high = maxOf(lastCandle.high, newPrice),
+                        low = minOf(lastCandle.low, newPrice)
+                    )
+
+                    currentCandles[lastIndex] = updatedCandle
+                    reduce { state.copy(candles = currentCandles) }
                 }
-        }
+            }
     }
+
 
     private fun onTradingClicked() = intent {
         reduce { state.copy(isVisibleTradingContent = !state.isVisibleTradingContent) }

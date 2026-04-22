@@ -101,6 +101,19 @@ internal fun ChartsContent(
     LaunchedEffect(state.candles) {
         val series = candlestickSeries ?: return@LaunchedEffect
         if (state.candles.isNotEmpty()) {
+            // For real-time updates from WebSocket, we update the last candle
+            // Lightweight Charts setData is expensive, update() is for real-time.
+            // However, we need to distinguish between "full refresh" and "tick update".
+            // For now, let's use update() on the last candle if we already have data.
+            val lastCandle = state.candles.last()
+            series.update(lastCandle)
+        }
+    }
+
+    // Initial data set
+    LaunchedEffect(state.isLoading) {
+        val series = candlestickSeries ?: return@LaunchedEffect
+        if (!state.isLoading && state.candles.isNotEmpty()) {
             series.setData(state.candles)
         }
     }

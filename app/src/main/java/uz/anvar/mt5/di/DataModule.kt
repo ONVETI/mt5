@@ -9,5 +9,5 @@ import uz.anvar.mt5.data.repository.ForexRepository
 val dataModule = module {
     single<FirebaseFirestore> { FirebaseFirestore.getInstance() }
     single { get<Retrofit>().create(TwelveDataApi::class.java) }
-    single { ForexRepository(get(), get()) }
+    single { ForexRepository(get(), get(), get(), get()) }
 }
