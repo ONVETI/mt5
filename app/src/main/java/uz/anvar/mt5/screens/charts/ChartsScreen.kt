@@ -45,10 +45,7 @@ import com.tradingview.lightweightcharts.api.chart.models.color.toIntColor
 import com.tradingview.lightweightcharts.api.interfaces.SeriesApi
 import com.tradingview.lightweightcharts.api.options.models.layoutOptions
 import com.tradingview.lightweightcharts.api.options.models.localizationOptions
-import com.tradingview.lightweightcharts.api.series.models.CandlestickData
-import com.tradingview.lightweightcharts.api.series.models.Time
 import com.tradingview.lightweightcharts.view.ChartsView
-import kotlinx.coroutines.delay
 import uz.anvar.mt5.R
 import uz.anvar.mt5.screens.charts.component.ChartsBottomBar
 import uz.anvar.mt5.screens.charts.component.ChartsTopBar
@@ -56,8 +53,6 @@ import uz.anvar.mt5.screens.charts.state.ChartsAction
 import uz.anvar.mt5.screens.charts.state.ChartsState
 import uz.anvar.mt5.screens.main.state.MainAction
 import uz.anvar.mt5.ui.theme.AppTheme
-import java.util.Calendar
-import kotlin.random.Random
 
 @Composable
 internal fun ChartsScreen(
@@ -102,74 +97,11 @@ internal fun ChartsContent(
 ) {
 
     var candlestickSeries by remember { mutableStateOf<SeriesApi?>(null) }
-    val updatesPerCandle = 5
 
-    LaunchedEffect(candlestickSeries) {
+    LaunchedEffect(state.candles) {
         val series = candlestickSeries ?: return@LaunchedEffect
-
-        // Initial data
-        val initialData = mutableListOf<CandlestickData>()
-        var currentPrice = 100f
-        val calendar = Calendar.getInstance().apply {
-            set(2024, 0, 1, 12, 0, 0)
-            set(Calendar.MILLISECOND, 0)
-        }
-
-        for (i in 0 until 100) {
-            val open = currentPrice
-            val close = currentPrice + (Random.nextFloat() - 0.5f) * 4f
-            val high = maxOf(open, close) + Random.nextFloat() * 2f
-            val low = minOf(open, close) - Random.nextFloat() * 2f
-
-            initialData.add(
-                CandlestickData(
-                    time = Time.Utc(calendar.timeInMillis / 1000),
-                    open = open,
-                    high = high,
-                    low = low,
-                    close = close
-                )
-            )
-            currentPrice = close
-            calendar.add(Calendar.DAY_OF_YEAR, 1)
-        }
-
-        series.setData(initialData)
-
-        // Real-time updates simulation
-        var lastCandleOpen = currentPrice
-        var lastCandleHigh = currentPrice
-        var lastCandleLow = currentPrice
-        var lastCandleClose = currentPrice
-        var ticksInCurrentCandle = 0
-
-        while (true) {
-            delay(500) // Update every 500ms
-
-            val tickDiff = (Random.nextFloat() - 0.5f) * 2f
-            lastCandleClose += tickDiff
-            lastCandleHigh = maxOf(lastCandleHigh, lastCandleClose)
-            lastCandleLow = minOf(lastCandleLow, lastCandleClose)
-
-            val currentCandle = CandlestickData(
-                time = Time.Utc(calendar.timeInMillis / 1000),
-                open = lastCandleOpen,
-                high = lastCandleHigh,
-                low = lastCandleLow,
-                close = lastCandleClose
-            )
-            series.update(currentCandle)
-
-            ticksInCurrentCandle++
-
-            if (ticksInCurrentCandle >= updatesPerCandle) {
-                // Prepare for the NEXT candle
-                calendar.add(Calendar.DAY_OF_YEAR, 1)
-                lastCandleOpen = lastCandleClose
-                lastCandleHigh = lastCandleClose
-                lastCandleLow = lastCandleClose
-                ticksInCurrentCandle = 0
-            }
+        if (state.candles.isNotEmpty()) {
+            series.setData(state.candles)
         }
     }
 
@@ -180,7 +112,7 @@ internal fun ChartsContent(
     ) {
 
         if (state.isVisibleTradingContent) {
-            TradeBar()
+            TradeBar(state)
         }
 
         AndroidView(
@@ -215,7 +147,9 @@ internal fun ChartsContent(
 }
 
 @Composable
-fun TradeBar() {
+fun TradeBar(state: ChartsState) {
+    val lastPrice = state.candles.lastOrNull()?.close?.toString() ?: "1.1792⁴"
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -236,11 +170,10 @@ fun TradeBar() {
                 modifier = Modifier
                     .fillMaxHeight()
                     .padding(4.dp),
-
-                )
+            )
 
             Text(
-                text = "1.1792⁴",
+                text = lastPrice,
                 color = Color.White,
                 style = AppTheme.typography.primary18Semibold,
                 modifier = Modifier.wrapContentSize(),
@@ -319,7 +252,7 @@ fun TradeBar() {
             )
 
             Text(
-                text = "1.1792⁴",
+                text = lastPrice,
                 color = Color.White,
                 style = AppTheme.typography.primary18Semibold,
                 modifier = Modifier.wrapContentSize(),
@@ -350,7 +283,7 @@ fun TradeBar() {
 private fun PreviewTradeBar() {
     AppTheme {
         Column() {
-            TradeBar()
+            TradeBar(state = ChartsState())
         }
     }
 }
