@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
@@ -36,6 +37,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -46,15 +48,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.graphics.toColorInt
 import com.tradingview.lightweightcharts.api.chart.models.color.toIntColor
 import com.tradingview.lightweightcharts.api.interfaces.SeriesApi
+import com.tradingview.lightweightcharts.api.options.models.candlestickSeriesOptions
 import com.tradingview.lightweightcharts.api.options.models.crosshairLineOptions
 import com.tradingview.lightweightcharts.api.options.models.crosshairOptions
 import com.tradingview.lightweightcharts.api.options.models.gridLineOptions
 import com.tradingview.lightweightcharts.api.options.models.gridOptions
 import com.tradingview.lightweightcharts.api.options.models.layoutOptions
 import com.tradingview.lightweightcharts.api.options.models.localizationOptions
-import com.tradingview.lightweightcharts.api.series.enums.CrosshairMode
 import com.tradingview.lightweightcharts.api.series.enums.LineStyle
 import com.tradingview.lightweightcharts.api.series.enums.LineWidth
 import com.tradingview.lightweightcharts.view.ChartsView
@@ -65,7 +68,6 @@ import uz.anvar.mt5.screens.charts.state.ChartsAction
 import uz.anvar.mt5.screens.charts.state.ChartsState
 import uz.anvar.mt5.screens.main.state.MainAction
 import uz.anvar.mt5.ui.theme.AppTheme
-import androidx.core.graphics.toColorInt
 
 @Composable
 internal fun ChartsScreen(
@@ -110,16 +112,18 @@ internal fun ChartsContent(
 ) {
 
     var candlestickSeries by remember { mutableStateOf<SeriesApi?>(null) }
+    var labelYOffset by remember { mutableStateOf<Float?>(null) }
+    val density = LocalDensity.current
 
-    LaunchedEffect(state.candles) {
+    LaunchedEffect(state.candles, state.countdownSeconds) {
         val series = candlestickSeries ?: return@LaunchedEffect
         if (state.candles.isNotEmpty()) {
-            // For real-time updates from WebSocket, we update the last candle
-            // Lightweight Charts setData is expensive, update() is for real-time.
-            // However, we need to distinguish between "full refresh" and "tick update".
-            // For now, let's use update() on the last candle if we already have data.
             val lastCandle = state.candles.last()
             series.update(lastCandle)
+
+            series.priceToCoordinate(lastCandle.close) { coordinate ->
+                labelYOffset = coordinate
+            }
         }
     }
 
@@ -128,6 +132,12 @@ internal fun ChartsContent(
         val series = candlestickSeries ?: return@LaunchedEffect
         if (!state.isLoading && state.candles.isNotEmpty()) {
             series.setData(state.candles)
+
+            state.candles.lastOrNull()?.let { last ->
+                series.priceToCoordinate(last.close) { coordinate ->
+                    labelYOffset = coordinate
+                }
+            }
         }
     }
 
@@ -189,15 +199,25 @@ internal fun ChartsContent(
                         api.addCandlestickSeries(
                             onSeriesCreated = { series ->
                                 candlestickSeries = series
-//                                series.applyOptions {
-//                                    upColor = android.graphics.Color.parseColor("#26a69a").toIntColor()
-//                                    downColor = android.graphics.Color.parseColor("#ef5350").toIntColor()
-//                                    borderVisible = true
-//                                    borderUpColor = android.graphics.Color.parseColor("#26a69a").toIntColor()
-//                                    borderDownColor = android.graphics.Color.parseColor("#ef5350").toIntColor()
-//                                    wickUpColor = android.graphics.Color.parseColor("#26a69a").toIntColor()
-//                                    wickDownColor = android.graphics.Color.parseColor("#ef5350").toIntColor()
-//                                }
+                                series.applyOptions(
+                                    candlestickSeriesOptions {
+
+                                        visible = true
+                                        wickVisible = true
+                                        priceLineVisible = true
+                                        lastValueVisible = true
+                                        borderVisible = true
+                                        baseLineVisible = true
+
+                                        wickColor = "#ef5350".toColorInt().toIntColor()
+                                        upColor = "#26a69a".toColorInt().toIntColor()
+                                        downColor = "#ef5350".toColorInt().toIntColor()
+                                        borderUpColor = "#26a69a".toColorInt().toIntColor()
+                                        borderDownColor = "#ef5350".toColorInt().toIntColor()
+                                        wickUpColor = "#26a69a".toColorInt().toIntColor()
+                                        wickDownColor = "#ef5350".toColorInt().toIntColor()
+                                    }
+                                )
                             }
                         )
                     }
@@ -241,10 +261,12 @@ internal fun ChartsContent(
 
             // Price and Countdown Label (Simplified overlay)
             state.candles.lastOrNull()?.let { last ->
+                val yOffset = labelYOffset ?: 0f
                 Box(
                     modifier = Modifier
-                        .align(Alignment.CenterEnd)
+                        .align(Alignment.TopEnd)
                         .padding(end = 48.dp)
+                        .offset(y = with(density) { (yOffset).toDp() - 10.dp })
                 ) {
                     val countdownFormatted = String.format(
                         "%02d:%02d",
