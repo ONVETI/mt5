@@ -7,4 +7,9 @@ data class ChartsState(
     val isVisibleTradingContent: Boolean = false,
     val candles: List<CandlestickData> = emptyList(),
     val error: String? = null,
+    val symbol: String = "EURUSD",
+    val interval: String = "M1",
+    val description: String = "Euro vs US Dollar",
+    val countdownSeconds: Int = 0,
 )
+

@@ -1,9 +1,11 @@
 package uz.anvar.mt5.screens.charts
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,6 +17,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -34,6 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
@@ -43,8 +48,15 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.tradingview.lightweightcharts.api.chart.models.color.toIntColor
 import com.tradingview.lightweightcharts.api.interfaces.SeriesApi
+import com.tradingview.lightweightcharts.api.options.models.crosshairLineOptions
+import com.tradingview.lightweightcharts.api.options.models.crosshairOptions
+import com.tradingview.lightweightcharts.api.options.models.gridLineOptions
+import com.tradingview.lightweightcharts.api.options.models.gridOptions
 import com.tradingview.lightweightcharts.api.options.models.layoutOptions
 import com.tradingview.lightweightcharts.api.options.models.localizationOptions
+import com.tradingview.lightweightcharts.api.series.enums.CrosshairMode
+import com.tradingview.lightweightcharts.api.series.enums.LineStyle
+import com.tradingview.lightweightcharts.api.series.enums.LineWidth
 import com.tradingview.lightweightcharts.view.ChartsView
 import uz.anvar.mt5.R
 import uz.anvar.mt5.screens.charts.component.ChartsBottomBar
@@ -53,6 +65,7 @@ import uz.anvar.mt5.screens.charts.state.ChartsAction
 import uz.anvar.mt5.screens.charts.state.ChartsState
 import uz.anvar.mt5.screens.main.state.MainAction
 import uz.anvar.mt5.ui.theme.AppTheme
+import androidx.core.graphics.toColorInt
 
 @Composable
 internal fun ChartsScreen(
@@ -128,34 +141,133 @@ internal fun ChartsContent(
             TradeBar(state)
         }
 
-        AndroidView(
-            factory = { context ->
-                ChartsView(context).apply {
-                    api.applyOptions {
-                        layout = layoutOptions {
-                            setBackgroundColor(android.graphics.Color.WHITE)
-                            textColor = android.graphics.Color.BLACK.toIntColor()
+        Box(modifier = Modifier.fillMaxSize()) {
+            AndroidView(
+                factory = { context ->
+                    ChartsView(context).apply {
+                        api.applyOptions {
+                            layout = layoutOptions {
+                                setBackgroundColor(android.graphics.Color.BLUE)
+                                textColor = android.graphics.Color.RED.toIntColor()
+                            }
+                            grid = gridOptions {
+                                vertLines = gridLineOptions {
+                                    color = android.graphics.Color.GREEN.toIntColor()
+                                    style = LineStyle.DOTTED
+                                    visible = true
+                                }
+                                horzLines = gridLineOptions {
+                                    color = android.graphics.Color.YELLOW.toIntColor()
+                                    style = LineStyle.DOTTED
+                                    visible = true
+                                }
+                            }
+                            crosshair = crosshairOptions {
+                                vertLine = crosshairLineOptions {
+                                    color = "#ff00d4".toColorInt().toIntColor()
+                                    width = LineWidth.FOUR
+                                    style = LineStyle.LARGE_DASHED
+                                    labelVisible = true
+                                    visible = true
+                                    labelBackgroundColor = android.graphics.Color.BLACK.toIntColor()
+                                }
+                                horzLine = crosshairLineOptions {
+                                    color = "#ff00d4".toColorInt().toIntColor()
+                                    width = LineWidth.FOUR
+                                    style = LineStyle.LARGE_DASHED
+                                    labelVisible = true
+                                    visible = true
+                                    labelBackgroundColor = android.graphics.Color.BLACK.toIntColor()
+                                }
+                            }
+
+                            localization = localizationOptions {
+                                locale = "en-US"
+                            }
                         }
-                        localization = localizationOptions {
-                            locale = "en-US"
-                        }
+
+                        api.addCandlestickSeries(
+                            onSeriesCreated = { series ->
+                                candlestickSeries = series
+//                                series.applyOptions {
+//                                    upColor = android.graphics.Color.parseColor("#26a69a").toIntColor()
+//                                    downColor = android.graphics.Color.parseColor("#ef5350").toIntColor()
+//                                    borderVisible = true
+//                                    borderUpColor = android.graphics.Color.parseColor("#26a69a").toIntColor()
+//                                    borderDownColor = android.graphics.Color.parseColor("#ef5350").toIntColor()
+//                                    wickUpColor = android.graphics.Color.parseColor("#26a69a").toIntColor()
+//                                    wickDownColor = android.graphics.Color.parseColor("#ef5350").toIntColor()
+//                                }
+                            }
+                        )
                     }
+                },
+                modifier = modifier.fillMaxSize(),
+                update = { view -> }
+            )
 
-                    api.addCandlestickSeries(
-                        onSeriesCreated = { series ->
-                            candlestickSeries = series
-
-                            // Let's do a better simulation here instead of LaunchedEffect if needed,
-                            // but LaunchedEffect is cleaner for Compose.
-                        }
+            // Overlay Symbol and Description
+            Column(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .align(Alignment.TopStart)
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = state.symbol,
+                        color = Color.Black,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Icon(
+                        imageVector = Icons.Default.ArrowDropDown,
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = state.interval,
+                        color = Color.Black,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold
                     )
                 }
-            },
-            modifier = modifier
-                .padding(paddingValues)
-                .fillMaxSize(),
-            update = { view -> }
-        )
+                Text(
+                    text = state.description,
+                    color = Color.Gray,
+                    fontSize = 14.sp
+                )
+            }
+
+            // Price and Countdown Label (Simplified overlay)
+            state.candles.lastOrNull()?.let { last ->
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd)
+                        .padding(end = 48.dp)
+                ) {
+                    val countdownFormatted = String.format(
+                        "%02d:%02d",
+                        state.countdownSeconds / 60,
+                        state.countdownSeconds % 60
+                    )
+                    Text(
+                        text = "${last.close} ($countdownFormatted)",
+                        color = Color.White,
+                        fontSize = 12.sp,
+                        modifier = Modifier
+                            .background(
+                                if (last.close >= last.open) {
+                                    Color(0xFF26a69a)
+                                } else {
+                                    Color(0xFFef5350)
+                                }
+                            )
+                            .padding(horizontal = 4.dp, vertical = 2.dp)
+                    )
+                }
+            }
+        }
     }
 }
 

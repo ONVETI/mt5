@@ -30,6 +30,7 @@ internal class ChartsViewModel(
         onCreate = {
             fetchInitialData()
             observeRealTimeUpdates()
+            startCountdownTimer()
         },
     )
 
@@ -37,6 +38,16 @@ internal class ChartsViewModel(
         when (action) {
             is ChartsAction.NavigateBack -> onNavigateBackClicked()
             ChartsAction.ClickTrading -> onTradingClicked()
+        }
+    }
+
+    private fun startCountdownTimer() = intent {
+        while (true) {
+            val secondsInMinute = 60
+            val currentSecond = (System.currentTimeMillis() / 1000) % secondsInMinute
+            val remaining = (secondsInMinute - currentSecond).toInt()
+            reduce { state.copy(countdownSeconds = remaining) }
+            delay(1000)
         }
     }
 
