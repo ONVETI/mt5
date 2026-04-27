@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "557767996170",
+    "project_id": "metatrader-79246",
+    "storage_bucket": "metatrader-79246.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:557767996170:android:c00122d41e9744853c40f3",
+        "android_client_info": {
+          "package_name": "uz.anvar.mt5"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApTEeOCgoYhAI-WQRHEv8bER2iCMDUsqY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
